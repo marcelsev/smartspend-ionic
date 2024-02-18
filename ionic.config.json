@@ -1,0 +1,8 @@
+{
+  "name": "Smartspend_ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "12582f37"
+}
