@@ -4,8 +4,35 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+    loadChildren: () => import('./index/index.module').then(m => m.IndexPageModule)
+  },
+  {
+    path: 'index',
+    loadChildren: () => import('./index/index.module').then( m => m.IndexPageModule)
+  },
+  {
+    path: 'inscription',
+    loadChildren: () => import('./inscription/inscription.module').then( m => m.InscriptionPageModule)
+  },
+  {
+    path: 'recuperation-mp',
+    loadChildren: () => import('./recuperation-mp/recuperation-mp.module').then( m => m.RecuperationMpPageModule)
+  },
+  {
+    path: 'profil',
+    loadChildren: () => import('./profil/profil.module').then( m => m.ProfilPageModule)
+  },
+  {
+    path: 'information-app',
+    loadChildren: () => import('./information-app/information-app.module').then( m => m.InformationAppPageModule)
+  },  {
+    path: 'formulaire',
+    loadChildren: () => import('./formulaire/formulaire.module').then( m => m.FormulairePageModule)
   }
+
+
+
+
 ];
 @NgModule({
   imports: [

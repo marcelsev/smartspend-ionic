@@ -1,0 +1,92 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <img src="../../assets/img/logo2.png" class="photo" alt="logo" />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container mb-3 cont-max-width">
+    <div class="signup text-center">
+
+      <form
+      action=""
+      onSubmit="{handleLogin}"
+      id="sign-up-form"
+      class="text-center p-4">
+      <div class="form-group mb-2">
+        <label for="nom">Nom</label>
+        <input type="text" name="nom" id="nom" class="form-control" />
+      </div>
+      <div class="form-group mb-2">
+        <label for="pseudo">Pseudo</label>
+        <input type="text" name="pseudo" id="pseudo" class="form-control" />
+      </div>
+      <div class="form-group mb-2">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" class="form-control" />
+      </div>
+
+      <div class="form-group mb-2">
+        <label for="password">Mot de passe</label>
+        <input type="password" name="password" id="password" class="form-control" />
+      </div>
+      <div class="form-group mb-2">
+        <label for="password"> Confiermer le mot de passe</label>
+        <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" />
+      </div>
+      <input type="checkbox" class="checkbox me-2"/><a href=""> J'accepte les conditions et les politiques</a>
+      <br>
+      <input type="submit" value="Valider inscription" class="btn btn-v rounded-4 ps-3 pe-3 mt-3" />
+    </form>
+
+  </div>
+</div>
+
+<section class="container mt-4 mb-4 cont-max-width">
+  <p class="comment border rounded-3 text-end ms-5">
+    Découvrez une manière plus intelligente de gérer votre argent avec
+    <strong>SmartSpend</strong>. Oubliez les saisies manuelles et contrôlez vos dépenses
+    automatiquement.
+  </p>
+  <p class="comment border rounded-3 text-start me-5">
+    Contrôlez vos dépenses avec <strong>SmartSpend</strong>. Une application intuitive pour
+    prendre des décisions financières plus intelligentes.
+  </p>
+  <p class="comment border rounded-3 text-end ms-5">
+    Votre assistant financier personnel. Avec <strong>SmartSpend</strong>, le suivi de vos
+    dépenses est simple et rapide.
+  </p>
+  <p class="comment border rounded-3 text-start me-5">
+    <strong>SmartSpend</strong>: l'outil essentiel pour une gestion financière
+    intelligente. Commencez dès aujourd'hui.
+  </p>
+</section>
+  <ion-footer >
+    <div class="container d-flex justify-content-around align-items-center">
+    <div class="footer-item flex-item text-center ">
+      <ul>
+        <li><a href="">À propos de </a></li>
+        <li><a href="">Contact</a></li>
+        <li>
+          <a href="">Politique de confidentialité et conditions de service</a>
+        </li>
+      </ul>
+    </div>
+    <div class="image footer-item text-center">
+      <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" />
+    </div>
+    <div class="footer-item flex-item text-center ">
+      <ul>
+        <li><a href="">FAQs</a></li>
+        <li><a href="">Informations sur les copyright</a></li>
+        <li>
+          <a href="">Reseau sociaux</a>
+          <br>
+          <i class="fa fa-twitter pe-2"></i>
+              <i class="fa fa-facebook"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+  </ion-footer>
+</ion-content>

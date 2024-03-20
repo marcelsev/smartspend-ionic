@@ -1,0 +1,27 @@
+ion-footer{
+    background-color: #003980;
+   list-style: none;
+    
+  }
+  .footer-item{
+   flex: 1;
+    font-size: 0.6em;
+  }
+  a{
+    text-decoration: none;
+    color: rgb(249, 246, 246);
+  }
+  ul {
+    list-style-type: none;
+  }
+  li{
+    padding: 7px 0px 7px 0px;
+  }
+  .image{
+    max-width: 150px;
+  }
+  @media only screen and (min-width: 600px) {
+    .footer-item{
+      font-size: 1.5em; 
+    }
+  }
