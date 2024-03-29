@@ -1,10 +1,112 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>profil</ion-title>
+    <nav class="container d-flex justify-content-around align-items-center">
+      <div class="nav-img">
+        <img src="../../assets/img/logonobg.png" alt="" class="photo img-fluid" />
+      </div>
+      <div>Bienvenue Max</div>
+      <div><i class="fas fa-user-slash"></i></div>
+    </nav>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <div class="graphique text-center">
+    <p>Le graphiques seront ici</p>
+  </div>
+
+  <!-- btn -->
+
+   <section class=" container cont-btn text-center">
+  <div
+    class="card-ajouter text-center d-flex justify-content-around border mb-4 ms-4 me-4 rounded-3 p-2"
+  >
+    <div class="">Ajoutez vos opérations</div>
+    <div><i class="fa fa-plus border rounded-4 border-black p-1"></i></div>
+  </div>
+</section> 
+  <!-- form-recherche -->
+  <div class="container mb-5">
+    <div class="recherche mb-3 cont-max-width p-1 ">
+      <div class="text-start ps-2 pt-2 pb-3">Informations ajoutées :</div>
+      <div class="text-start ps-3">Filtres : </div>
+
+      <form class="align-items-center text-center border-bottom border-4 pb-3">
+        <div class="form-group">
+          <label for="inputFecha1"></label>
+          <input type="date" id="inputFecha1" required placeholder="Date" />
+        </div>-
+        <div class="form-group">
+          <label for="inputFecha2"></label>
+          <input type="date" id="inputFecha2" required />
+        </div>
+
+        <div class="form-group">
+          <label for="select1"></label>
+          <select id="select1" required>
+            <option value="" disabled selected>Choisir une categorie</option>
+            <option value="">Logement</option>
+            <option value="">transport</option>
+            <option value=" ">Assurances</option>
+            <option value="">Alimentation</option>
+            <option value="">Loisirs</option>
+            <option value="">Dettes et prêts</option>
+            <option value="">Achats</option>
+            <option value="">Médical</option>
+            <option value="">Autres dépenses</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="inputNumber"></label>
+          <input type="number" id="inputNumber" required />
+        </div>-
+
+        <div class="form-group">
+          <label for="inputNumber2"></label>
+          <input type="number" id="inputNumber2" required />
+        </div>
+
+        <div class="form-group">
+          <label for="select2"></label>
+          <select id="select2" required>
+            <option value="" disabled selected>Choisir une categorie</option>
+            <option value="">Carte Bleue</option>
+            <option value=" ">Espèces</option>
+            <option value=" ">Chèque</option>
+            <option value=" ">Virement bancaire</option>
+          </select>
+        </div>
+        <div class="  w-100">
+        <button type="submit" class=" rounded-5 color-btn p-2">Valider</button>
+      </div>
+      </form>
+
+<!-- tableau de resultat -->
+<div class=" pb-5 pe-1 ps-1">
+<div class="border bg-light mt-3 card-info p-1">
+categorie  | montant | date | mode de paiement |  localisation | Notes 
+</div>
+<div class="border bg-light mt-3 card-info p-1">
+categorie  | montant | date | mode de paiement |  localisation | Notes 
+</div>
+<div class="border bg-light mt-3 card-info p-1">
+categorie  | montant | date | mode de paiement |  localisation | Notes 
+</div>
+<div class="border bg-light mt-3 card-info p-1">
+categorie  | montant | date | mode de paiement |  localisation | Notes 
+</div>
+<div class="border bg-light mt-3 card-info p-1">
+categorie  | montant | date | mode de paiement |  localisation | Notes 
+</div>
+<div class="border bg-light mt-3 card-info p-1">
+categorie  | montant | date | mode de paiement |  localisation | Notes 
+</div>
+</div>
+    </div>
+  </div> 
+
+
   <ion-footer >
     <div class="container d-flex justify-content-around align-items-center">
     <div class="footer-item flex-item text-center ">

@@ -1,10 +1,46 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>recuperation_mp</ion-title>
+    <nav class="container mb-3">
+      <img src="../../assets/img/logo2.png" class="photo" alt="logo" />
+    </nav>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
+  
+<h1 class="intro text-center">Récupérer mon mot de passe</h1>
+
+<!-- formulaire recuperation -->
+<div class="container mb-5 cont-max-width">
+ <div class="recup text-center">
+
+   <form
+   action=""
+   onSubmit="{handleLogin}"
+   id="recup-form"
+   class="text-center p-4">
+   
+  
+   <div class="form-group mb-2">
+     <label for="email">Email</label>
+     <input type="text" name="email" id="email" class="form-control" />
+   </div>
+
+   <div class="form-group mb-2">
+     <label for="password">Mot de passe</label>
+     <input type="password" name="password" id="password" class="form-control" />
+   </div>
+   <div class="form-group mb-2">
+     <label for="password"> Confiermer le mot de passe</label>
+     <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" />
+   </div>
+   
+   <input type="submit" value="Valider" class="btn btn-v mt-3" />
+ </form>
+ </div>
+</div>
+
   <ion-footer >
     <div class="container d-flex justify-content-around align-items-center">
     <div class="footer-item flex-item text-center ">
