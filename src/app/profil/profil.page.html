@@ -4,8 +4,8 @@
       <div class="nav-img">
         <img src="../../assets/img/logonobg.png" alt="" class="photo img-fluid" />
       </div>
-      <div>Bienvenue Max</div>
-      <div><i class="fas fa-user-slash"></i></div>
+      <div>Bienvenue {{ user?.name }}</div>
+      <div><i class="fas fa-user-slash" (click)="logout()"></i></div>
     </nav>
   </ion-toolbar>
 </ion-header>
