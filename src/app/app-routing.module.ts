@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   {
@@ -20,14 +21,17 @@ const routes: Routes = [
   },
   {
     path: 'profil',
-    loadChildren: () => import('./profil/profil.module').then( m => m.ProfilPageModule)
+    loadChildren: () => import('./profil/profil.module').then( m => m.ProfilPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'information-app',
     loadChildren: () => import('./information-app/information-app.module').then( m => m.InformationAppPageModule)
-  },  {
+  },
+  {
     path: 'formulaire',
-    loadChildren: () => import('./formulaire/formulaire.module').then( m => m.FormulairePageModule)
+    loadChildren: () => import('./formulaire/formulaire.module').then( m => m.FormulairePageModule),
+    canActivate: [AuthGuard] 
   }
 
 

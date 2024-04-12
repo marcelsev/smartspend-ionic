@@ -84,4 +84,12 @@ export class AuthService {
       })
     );
   }
+
+  
+  isLoggedIn(): boolean {
+    // Implementa la lógica para verificar si el usuario está autenticado
+    // Por ejemplo, puedes verificar si existe un token de sesión en el localStorage
+    const token = localStorage.getItem('token');
+    return !!token; // Devuelve true si existe un token, de lo contrario false
+  }
 }

@@ -22,7 +22,7 @@
     class="card-ajouter text-center d-flex justify-content-around border mb-4 ms-4 me-4 rounded-3 p-2"
   >
     <div class="">Ajoutez vos opérations</div>
-    <div><i class="fa fa-plus border rounded-4 border-black p-1"></i></div>
+    <div><i class="fa fa-plus border rounded-4 border-black p-1" routerLink="/formulaire"></i></div>
   </div>
 </section> 
   <!-- form-recherche -->
@@ -63,10 +63,7 @@
           <label for="select2"></label>
           <select id="select2" required>
             <option value="" disabled selected>Choisir une categorie</option>
-            <option value="">Carte Bleue</option>
-            <option value=" ">Espèces</option>
-            <option value=" ">Chèque</option>
-            <option value=" ">Virement bancaire</option>
+            <option value=""*ngFor="let method of methodPays">{{ method.name }}</option>
           </select>
         </div>
         <div class="  w-100">
@@ -76,23 +73,11 @@
 
 <!-- tableau de resultat -->
 <div class=" pb-5 pe-1 ps-1">
-<div class="border bg-light mt-3 card-info p-1">
-categorie  | montant | date | mode de paiement |  localisation | Notes 
+<div class="border bg-light mt-3 card-info p-1" *ngFor="let expense of expenses">
+  {{ categoriesMap[expense.CategoryId] }} | {{ expense.amount }} | {{ expense.exp_date | date:'dd/MM/yyyy' }} | {{ methodPaysMap[expense.MethodPayId] }} |  {{ expense.location }} | {{ expense.note }} 
 </div>
-<div class="border bg-light mt-3 card-info p-1">
-categorie  | montant | date | mode de paiement |  localisation | Notes 
-</div>
-<div class="border bg-light mt-3 card-info p-1">
-categorie  | montant | date | mode de paiement |  localisation | Notes 
-</div>
-<div class="border bg-light mt-3 card-info p-1">
-categorie  | montant | date | mode de paiement |  localisation | Notes 
-</div>
-<div class="border bg-light mt-3 card-info p-1">
-categorie  | montant | date | mode de paiement |  localisation | Notes 
-</div>
-<div class="border bg-light mt-3 card-info p-1">
-categorie  | montant | date | mode de paiement |  localisation | Notes 
+<div class="border bg-success mt-3 card-info p-1" *ngFor="let deposit of deposits">
+  {{ deposit.amount }} | {{ deposit.exp_date | date:'dd/MM/yyyy' }}  |  {{ deposit.note }} 
 </div>
 </div>
     </div>

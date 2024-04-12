@@ -5,12 +5,11 @@ import { Observable, catchError, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ExpenseService {
-
+export class DepositService {
   private apiUrl = 'http://localhost:3000';
   constructor(private http: HttpClient) { }
 
-  getExpensesByUserId(): Observable<any[]> {
+  getDepositsByUserId(): Observable<any[]> {
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -22,7 +21,7 @@ export class ExpenseService {
       'Authorization': `Bearer ${token}`
     });
 
-    const url = `${this.apiUrl}/expense`;
+    const url = `${this.apiUrl}/deposit`;
     return this.http.get<any[]>(url, { headers: headers }).pipe(
       catchError((error) => {
         console.error('Error al obtener expenses:', error);
@@ -38,5 +37,5 @@ export class ExpenseService {
       console.error('Error al decodificar el token:', error);
       return {};
     }
-  }
+}
 }
