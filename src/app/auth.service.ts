@@ -26,6 +26,16 @@ export class AuthService {
     );
   }
 
+  /* getUserProfile(userId: number): Observable<any> {
+    const url = `${this.apiUrl}/users/${userId}`;
+
+    return this.http.get(url).pipe(
+      catchError((error) => {
+        console.error('Error al obtener información del usuario:', error);
+        return throwError('Error al obtener información del usuario');
+      })
+    );
+  } */
 
   getUserProfile(): Observable<any> {
     const token = localStorage.getItem('token');
@@ -47,7 +57,7 @@ export class AuthService {
     const url = `${this.apiUrl}/users/${userId}`;
     console.log('URL de solicitud:', url);
   
-    return this.http.get(url, { headers }).pipe(
+    return this.http.get(url, { headers : headers }).pipe(
       catchError((error) => {
         console.error('Error al obtener información del usuario:', error);
         return throwError('Error al obtener información del usuario');
@@ -64,7 +74,7 @@ export class AuthService {
     }
   }
   
-  
+   
 
   logout(): Observable<any> {
     return this.http.post(`${this.apiUrl}/logout`, {}).pipe(

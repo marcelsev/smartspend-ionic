@@ -4,7 +4,7 @@
       <div class="nav-img">
         <img src="../../assets/img/logonobg.png" alt="" class="photo img-fluid" />
       </div>
-      <div>Bienvenue {{ user?.name }}</div>
+      <div>Bienvenue {{ userName }}</div>
       <div><i class="fas fa-user-slash" (click)="logout()"></i></div>
     </nav>
   </ion-toolbar>
@@ -41,19 +41,11 @@
           <input type="date" id="inputFecha2" required />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="categories.length > 0">
           <label for="select1"></label>
           <select id="select1" required>
             <option value="" disabled selected>Choisir une categorie</option>
-            <option value="">Logement</option>
-            <option value="">transport</option>
-            <option value=" ">Assurances</option>
-            <option value="">Alimentation</option>
-            <option value="">Loisirs</option>
-            <option value="">Dettes et prêts</option>
-            <option value="">Achats</option>
-            <option value="">Médical</option>
-            <option value="">Autres dépenses</option>
+            <option value="" *ngFor="let category of categories">{{ category.name }}</option>
           </select>
         </div>
 
