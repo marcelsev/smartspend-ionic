@@ -7,11 +7,6 @@
 
 <ion-content [fullscreen]="true" class="text-center">
   <h1 class="intro">BIENVENUE</h1>
- 
-  <ion-button routerLink="/profil">profil</ion-button> 
-  <ion-button routerLink="/information-app">info</ion-button>
-
-  <ion-button routerLink="/formulaire">formulaire</ion-button>
   <div class="container mb-3 cont-max-width">
     <div class="signin text-center">
       <form (ngSubmit)="login()" #loginForm="ngForm" id="sign-in-form" class="text-center p-4">
@@ -76,21 +71,21 @@
     <div class="footer-item flex-item text-center ">
       <ul>
         <li><a [routerLink]="'/information-app'" fragment="testfq">À propos de </a></li>
-        <li><a href="">Contact</a></li>
+        <li><a routerLink="/information-app">Contact</a></li>
         <li>
-          <a href="">Politique de confidentialité et conditions de service</a>
+          <a routerLink="/information-app">Politique de confidentialité et conditions de service</a>
         </li>
       </ul>
     </div>
     <div class="image footer-item text-center">
-      <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" />
+      <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" routerLink="/information-app"/>
     </div>
     <div class="footer-item flex-item text-center ">
       <ul>
-        <li><a href="">FAQs</a></li>
-        <li><a href="">Informations sur les copyright</a></li>
+        <li><a routerLink="/information-app">FAQs</a></li>
+        <li><a routerLink="/information-app">Informations sur les copyright</a></li>
         <li>
-          <a href="">Reseau sociaux</a>
+          <a routerLink="/information-app">Reseau sociaux</a>
           <br>
           <i class="fa fa-twitter pe-2"></i>
               <i class="fa fa-facebook"></i>

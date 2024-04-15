@@ -39,4 +39,13 @@ export class ExpenseService {
       return {};
     }
   }
+  createExpense(expenseData: any): Observable<any> {
+    const url = `${this.apiUrl}/expense`;
+    return this.http.post(url, expenseData).pipe(
+      catchError((error) => {
+        console.error('Error al crear expense:', error);
+        return throwError('Error al crear expense'); // Puedes manejar el error aquí o reenviarlo al componente
+      })
+    );
+  }
 }

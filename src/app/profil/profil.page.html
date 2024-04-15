@@ -4,7 +4,7 @@
       <div class="nav-img">
         <img src="../../assets/img/logonobg.png" alt="" class="photo img-fluid" />
       </div>
-      <div>Bienvenue {{ userName }}</div>
+      <div>Bienvenue <strong>{{ userName }}</strong></div>
       <div><i class="fas fa-user-slash" (click)="logout()"></i></div>
     </nav>
   </ion-toolbar>
@@ -19,10 +19,10 @@
 
    <section class=" container cont-btn text-center">
   <div
-    class="card-ajouter text-center d-flex justify-content-around border mb-4 ms-4 me-4 rounded-3 p-2"
+    class="card-ajouter text-center d-flex justify-content-around align-items-center mb-4 ms-4 me-4 rounded-3 p-2"
   >
-    <div class="">Ajoutez vos opérations</div>
-    <div><i class="fa fa-plus border rounded-4 border-black p-1" routerLink="/formulaire"></i></div>
+    <div class=""><strong>Ajoutez vos opérations</strong></div>
+    <div><i class="fa fa-plus border rounded-4 border-black p-2" routerLink="/formulaire"></i></div>
   </div>
 </section> 
   <!-- form-recherche -->
@@ -73,43 +73,44 @@
 
 <!-- tableau de resultat -->
 <div class=" pb-5 pe-1 ps-1">
-<div class="border bg-light mt-3 card-info p-1" *ngFor="let expense of expenses">
-  {{ categoriesMap[expense.CategoryId] }} | {{ expense.amount }} | {{ expense.exp_date | date:'dd/MM/yyyy' }} | {{ methodPaysMap[expense.MethodPayId] }} |  {{ expense.location }} | {{ expense.note }} 
+<div class="border bg-light mt-3 card-info p-2" *ngFor="let expense of expenses">
+  {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>{{ expense.amount }} € <strong> | </strong> {{ expense.exp_date | date:'dd/MM/yyyy' }} <strong> | </strong> {{ methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{ expense.location }} <strong> | </strong>{{ expense.note }} 
 </div>
-<div class="border bg-success mt-3 card-info p-1" *ngFor="let deposit of deposits">
-  {{ deposit.amount }} | {{ deposit.exp_date | date:'dd/MM/yyyy' }}  |  {{ deposit.note }} 
+<div class=" bg-success mt-3 card-info p-2 ps-3" *ngFor="let deposit of deposits">
+  {{ deposit.amount }} €<strong> | </strong> {{ deposit.dep_date | date:'dd/MM/yyyy' }}  <strong> | </strong> {{ deposit.note }} 
 </div>
 </div>
     </div>
   </div> 
 
 
-  <ion-footer >
-    <div class="container d-flex justify-content-around align-items-center">
-    <div class="footer-item flex-item text-center ">
-      <ul>
-        <li><a href="">À propos de </a></li>
-        <li><a href="">Contact</a></li>
-        <li>
-          <a href="">Politique de confidentialité et conditions de service</a>
-        </li>
-      </ul>
-    </div>
-    <div class="image footer-item text-center">
-      <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" />
-    </div>
-    <div class="footer-item flex-item text-center ">
-      <ul>
-        <li><a href="">FAQs</a></li>
-        <li><a href="">Informations sur les copyright</a></li>
-        <li>
-          <a href="">Reseau sociaux</a>
-          <br>
-          <i class="fa fa-twitter pe-2"></i>
-              <i class="fa fa-facebook"></i>
-        </li>
-      </ul>
-    </div>
+<!-- FOOTER -->
+<ion-footer >
+  <div class="container d-flex justify-content-around align-items-center">
+  <div class="footer-item flex-item text-center ">
+    <ul>
+      <li><a [routerLink]="'/information-app'" fragment="testfq">À propos de </a></li>
+      <li><a routerLink="/information-app">Contact</a></li>
+      <li>
+        <a routerLink="/information-app">Politique de confidentialité et conditions de service</a>
+      </li>
+    </ul>
   </div>
-  </ion-footer>
+  <div class="image footer-item text-center">
+    <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" routerLink="/information-app"/>
+  </div>
+  <div class="footer-item flex-item text-center ">
+    <ul>
+      <li><a routerLink="/information-app">FAQs</a></li>
+      <li><a routerLink="/information-app">Informations sur les copyright</a></li>
+      <li>
+        <a routerLink="/information-app">Reseau sociaux</a>
+        <br>
+        <i class="fa fa-twitter pe-2"></i>
+            <i class="fa fa-facebook"></i>
+      </li>
+    </ul>
+  </div>
+</div>
+</ion-footer>
 </ion-content>

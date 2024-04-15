@@ -14,6 +14,7 @@
 
 .fa-plus{
   background-color: #0052d0;
+  box-shadow: 2px 4px 6px #00000040;
   color: white;
 }
 /* form-recherche  */
@@ -35,6 +36,10 @@ form {
 .form-group {
   width: calc(33.33% - 10px);
   margin-bottom: 10px;
+}
+.form-group input, select {
+  background-color: #ffffff;
+  color: black;
 }
 
 label {

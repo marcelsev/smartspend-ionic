@@ -2,10 +2,10 @@
   <ion-toolbar>
     <nav class="container d-flex justify-content-around align-items-center">
       <div class="nav-img"  >
-        <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid" />
+        <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid" routerLink="/profil"/>
       </div>
-      <div>Bienvenue Max</div>
-      <div><i class="fas fa-user-slash"></i></div>
+      <div>Bienvenue <strong>{{ userName }}</strong> </div>
+      <div><i class="fas fa-user-slash" (click)="logout()"></i></div>
     </nav>
   </ion-toolbar>
 </ion-header>
@@ -23,72 +23,47 @@
       />
     </div>
     <form
-      action=""
-      onSubmit="{handleLogin}"
-      id="depenses-form"
-      class="text-center p-4"
-    >
-      <div class="form-group mb-2">
-        <label for="categorie">Categorie</label>
-        <select
-          name="categorie"
-          id="categorie"
-          class="form-control"
-         
-        > <option value="" disabled selected>Choisir une categorie</option>
-          <option value="">Logement</option>
-          <option value="">transport</option>
-          <option value=" ">Assurances</option>
-          <option value="">Alimentation</option>
-          <option value="">Loisirs</option>
-          <option value="">Dettes et prêts</option>
-          <option value="">Achats</option>
-          <option value="">Médical</option>
-          <option value="">Autres dépenses</option>
-        </select>
-      </div>
-      <div class="form-group mb-2">
-        <label for="montant">Montant</label>
-        <input
-          type="number"
-          name="montant"
-          id="montant"
-          class="form-control"
-        />
-      </div>
-      <div class="form-group mb-2">
-        <label for="date">Date</label>
-        <input type="date" name="date" id="date" class="form-control" />
-      </div>
-      <div class="form-group mb-2">
-        <label for="mode">Mode de paiement</label>
-        <select name="mode" id="mode" class="form-control">
-          <option value="" disabled selected>Choisir une categorie</option>
-          <option value="">Carte Bleue</option>
-          <option value=" ">Espèces</option>
-          <option value=" ">Chèque</option>
-          <option value=" ">Virement bancaire</option>
-        </select>
-      </div>
-      <div class="form-group mb-2">
-        <label for="localisation">Localisation</label>
-        <input
-          type="text"
-          name="localisation"
-          id="localisation"
-          class="form-control"
-        />
-      </div>
-      <div class="form-group mb-2">
-        <label for="notes">Notes complémentaires</label>
-        <input type="text" name="notes" id="notes" class="form-control" />
-      </div>
-      <input
-        type="submit"
-        value="Enregistrer"
-        class="btn btn-v rounded-4 ps-3 pe-3 mt-3"
-      />
-    </form>
+  (ngSubmit)="createExpense()"
+  id="depenses-form"
+  class="text-center p-4"
+  [formGroup]="expenseForm"
+>
+  <div class="form-group mb-2">
+    <label for="categorie">Categorie</label>
+    <select formControlName="CategoryId" class="form-control">
+      <option value="" disabled selected>Choisir une catégorie</option>
+      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+    </select>
+  </div>
+  <div class="form-group mb-2">
+    <label for="montant">Montant</label>
+    <input type="number" formControlName="amount" class="form-control" />
+  </div>
+  <div class="form-group mb-2">
+    <label for="date">Date</label>
+    <input type="date" formControlName="exp_date" class="form-control" />
+  </div>
+  <div class="form-group mb-2">
+    <label for="mode">Mode de paiement</label>
+    <select formControlName="MethodPayId" class="form-control">
+      <option value="" disabled selected>Choisir un mode de paiement</option>
+      <option *ngFor="let method of methodPays" [value]="method.id">{{ method.name }}</option>
+    </select>
+  </div>
+  <div class="form-group mb-2">
+    <label for="localisation">Localisation</label>
+    <input type="text" formControlName="location" class="form-control" />
+  </div>
+  <div class="form-group mb-2">
+    <label for="notes">Notes complémentaires</label>
+    <input type="text" formControlName="note" class="form-control" />
+  </div>
+  <input
+    type="submit"
+    value="Enregistrer"
+    class="btn btn-v rounded-4 ps-3 pe-3 mt-3"
+  />
+</form>
   </div>
 </div>
 
@@ -100,65 +75,75 @@
 <h1>REVENUS</h1>
     </div>
     <form
-      action=""
-      onSubmit="{handleLogin}"
-      id="revenus-form"
-      class="text-center p-4"
-    >
-     
-      <div class="form-group mb-2">
-        <label for="montant">Montant</label>
-        <input
-          type="number"
-          name="montant"
-          id="montant"
-          class="form-control"
-        />
-      </div>
-      <div class="form-group mb-2">
-        <label for="date">Date</label>
-        <input type="date" name="date" id="date" class="form-control" />
-      </div>
+  (ngSubmit)="createDeposit()"
+  id="revenus-form"
+  class="text-center p-4"
+  [formGroup]="depositForm"
+>
+  <div class="form-group mb-2">
+    <label for="amount">Montant</label>
+    <input
+      type="number"
+      formControlName="amount"
+      id="amount"
+      class="form-control"
+    />
+  </div>
+  <div class="form-group mb-2">
+    <label for="dep_date">Date</label>
+    <input
+      type="date"
+      formControlName="dep_date"
+      id="dep_date"
+      class="form-control"
+    />
+  </div>
+  <div class="form-group mb-2">
+    <label for="note">Notes :</label>
+    <input
+      type="text"
+      formControlName="note"
+      id="note"
+      class="form-control"
+    />
+  </div>
+  <input
+    type="submit"
+    value="Enregistrer"
+    class="btn btn-v rounded-4 ps-3 pe-3 mt-3"
+  />
+</form>
 
-      <div class="form-group mb-2">
-        <label for="notes">Notes :</label>
-        <input type="text" name="notes" id="notes" class="form-control" />
-      </div>
-      <input
-        type="submit"
-        value="Enregistrer"
-        class="btn btn-v rounded-4 ps-3 pe-3 mt-3"
-      />
-    </form>
   </div>
 </div>
 
-  <ion-footer >
-    <div class="container d-flex justify-content-around align-items-center">
-    <div class="footer-item flex-item text-center ">
-      <ul>
-        <li><a href="">À propos de </a></li>
-        <li><a href="">Contact</a></li>
-        <li>
-          <a href="">Politique de confidentialité et conditions de service</a>
-        </li>
-      </ul>
-    </div>
-    <div class="image footer-item text-center">
-      <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" />
-    </div>
-    <div class="footer-item flex-item text-center ">
-      <ul>
-        <li><a href="">FAQs</a></li>
-        <li><a href="">Informations sur les copyright</a></li>
-        <li>
-          <a href="">Reseau sociaux</a>
-          <br>
-          <i class="fa fa-twitter pe-2"></i>
-              <i class="fa fa-facebook"></i>
-        </li>
-      </ul>
-    </div>
+  
+<!-- FOOTER -->
+<ion-footer >
+  <div class="container d-flex justify-content-around align-items-center">
+  <div class="footer-item flex-item text-center ">
+    <ul>
+      <li><a [routerLink]="'/information-app'" fragment="testfq">À propos de </a></li>
+      <li><a routerLink="/information-app">Contact</a></li>
+      <li>
+        <a routerLink="/information-app">Politique de confidentialité et conditions de service</a>
+      </li>
+    </ul>
   </div>
-  </ion-footer>
-</ion-content>
+  <div class="image footer-item text-center">
+    <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" routerLink="/information-app"/>
+  </div>
+  <div class="footer-item flex-item text-center ">
+    <ul>
+      <li><a routerLink="/information-app">FAQs</a></li>
+      <li><a routerLink="/information-app">Informations sur les copyright</a></li>
+      <li>
+        <a routerLink="/information-app">Reseau sociaux</a>
+        <br>
+        <i class="fa fa-twitter pe-2"></i>
+            <i class="fa fa-facebook"></i>
+      </li>
+    </ul>
+  </div>
+</div>
+</ion-footer>

@@ -11,15 +11,21 @@ import { DepositService } from '../deposit.service';
   styleUrls: ['./profil.page.scss'],
 })
 export class ProfilPage implements OnInit {
-userId: number | null = null;
-userName: string = '';
-categories: any[] = [];
-methodPays: any[] = [];
-expenses: any[] = [];
-deposits: any[] = [];
- categoriesMap: { [key: number]: string } = {};
+  userId: number | null = null;
+  userName: string = '';
+  categories: any[] = [];
+  methodPays: any[] = [];
+  expenses: any[] = [];
+  deposits: any[] = [];
+  categoriesMap: { [key: number]: string } = {};
   methodPaysMap: { [key: number]: string } = {};
-  constructor(private authService: AuthService, private categoryService: CategoryService, private expenseService: ExpenseService, private methodPayService: MethodPayService, private depositService: DepositService) {}
+  constructor(
+    private authService: AuthService,
+    private categoryService: CategoryService,
+    private expenseService: ExpenseService,
+    private methodPayService: MethodPayService,
+    private depositService: DepositService
+  ) {}
 
   /* ngOnInit(): void {
     this.authService.getUserProfile(this.userId).subscribe(
@@ -46,7 +52,7 @@ deposits: any[] = [];
         if (this.userId) {
           this.loadCategories();
           this.loadExpenses();
-          this. loadMethodPays();
+          this.loadMethodPays();
           this.loadDeposits();
         } else {
           console.error('No se pudo obtener el userId del usuario');
@@ -81,7 +87,9 @@ deposits: any[] = [];
         console.error('Error al cargar las categorías:', error);
       }
     );
-  }loadMethodPays(): void {
+  }
+
+  loadMethodPays(): void {
     this.methodPayService.getAllMethodPays().subscribe(
       (methodPays) => {
         this.methodPays = methodPays;
@@ -98,12 +106,16 @@ deposits: any[] = [];
     this.expenseService.getExpensesByUserId().subscribe(
       (expenses) => {
         if (this.userId) {
-          this.expenses = expenses.filter((expense) => expense.UserId === this.userId);
-          console.log('Expenses obtenidas filtradas por userId:', this.expenses);
+          this.expenses = expenses.filter(
+            (expense) => expense.UserId === this.userId
+          );
+          console.log(
+            'Expenses obtenidas filtradas por userId:',
+            this.expenses
+          );
         } else {
           console.error('No se pudo obtener el userId del usuario');
         }
-      
       },
       (error) => {
         console.error('Error al obtener expenses:', error);
@@ -116,7 +128,9 @@ deposits: any[] = [];
     this.depositService.getDepositsByUserId().subscribe(
       (deposit) => {
         if (this.userId) {
-          this.deposits = deposit.filter((deposit) => deposit.UserId === this.userId);
+          this.deposits = deposit.filter(
+            (deposit) => deposit.UserId === this.userId
+          );
           console.log('deposit obtenidas filtradas por userId:', this.deposits);
         } else {
           console.error('No se pudo obtener el userId del usuario');
