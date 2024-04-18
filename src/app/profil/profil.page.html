@@ -12,7 +12,12 @@
 
 <ion-content [fullscreen]="true">
   <div class="graphique text-center">
-    <p>Le graphiques seront ici</p>
+    <h1>Perfil del Usuario</h1>
+    <div>
+     
+    </div>
+    <!-- Aquí se insertará el gráfico -->
+    <!-- <canvas #doughnutChart width="40" height="40"></canvas> -->
   </div>
 
   <!-- btn -->
@@ -26,62 +31,70 @@
   </div>
 </section> 
   <!-- form-recherche -->
-  <div class="container mb-5">
-    <div class="recherche mb-3 cont-max-width p-1 ">
-      <div class="text-start ps-2 pt-2 pb-3">Informations ajoutées :</div>
-      <div class="text-start ps-3">Filtres : </div>
-
-      <form class="align-items-center text-center border-bottom border-4 pb-3">
-        <div class="form-group">
-          <label for="inputFecha1"></label>
-          <input type="date" id="inputFecha1" required placeholder="Date" />
-        </div>-
-        <div class="form-group">
-          <label for="inputFecha2"></label>
-          <input type="date" id="inputFecha2" required />
-        </div>
-
-        <div class="form-group" *ngIf="categories.length > 0">
-          <label for="select1"></label>
-          <select id="select1" required>
-            <option value="" disabled selected>Choisir une categorie</option>
-            <option value="" *ngFor="let category of categories">{{ category.name }}</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="inputNumber"></label>
-          <input type="number" id="inputNumber" required />
-        </div>-
-
-        <div class="form-group">
-          <label for="inputNumber2"></label>
-          <input type="number" id="inputNumber2" required />
-        </div>
-
-        <div class="form-group">
-          <label for="select2"></label>
-          <select id="select2" required>
-            <option value="" disabled selected>Choisir une categorie</option>
-            <option value=""*ngFor="let method of methodPays">{{ method.name }}</option>
-          </select>
-        </div>
-        <div class="  w-100">
-        <button type="submit" class=" rounded-5 color-btn p-2">Valider</button>
+<div class="container mb-5">
+  <div class="recherche mb-3 cont-max-width p-1">
+    <div class="text-center ps-3 pt-2 pb-3 fs-2">Informations ajoutées :</div>
+    <div class="text-start ps-3  pt-3">Trouvez vos dépenses! :</div>
+    <div class="d-flex justify-content-between ps-3"><p> Filtres : </p> <button type="button" class=" btn rounded-4 btn-info btn-sm  p-2  mb-3" (click)="clearFilters()">Effacer les filtres</button> </div> 
+    <form class="align-items-center text-center border-bottom border-4 pb-3" (ngSubmit)="applyFilters()">
+      <!-- Contenido del formulario (inputs y select) -->
+      <div class="form-group">
+        <label for="inputFecha1">Date debut</label>
+        <input type="date" id="inputFecha1" [(ngModel)]="fechaInicio" name="fechaInicio" required placeholder="Date" />
+      </div>-
+      <div class="form-group">
+        <label for="inputFecha2">Date fini</label>
+        <input type="date" id="inputFecha2" [(ngModel)]="fechaFin" name="fechaFin" required />
       </div>
-      </form>
+      <div class="form-group" *ngIf="categories.length > 0">
+        <label for="select1">Catégorie</label>
+        <select id="select1" [(ngModel)]="categoryId" name="categoryId" required>
+          <option value="" disabled selected>Choisir une catégorie</option>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="inputNumber">Min Montant</label>
+        <input type="number" id="inputNumber" [(ngModel)]="minAmount" name="minAmount" required />
+      </div>-
+      <div class="form-group">
+        <label for="inputNumber2">Max Montant</label>
+        <input type="number" id="inputNumber2" [(ngModel)]="maxAmount" name="maxAmount" required />
+      </div>
+      <div class="form-group">
+        <label for="select2"> Paiement</label>
+        <select id="select2" [(ngModel)]="methodPayId" name="methodPayId" required>
+          <option value="" disabled selected>Choisir un mode de paiement</option>
+          <option *ngFor="let method of methodPays" [value]="method.id">{{ method.name }}</option>
+        </select>
+      </div>
+      <div class="w-100">
+        <button type="submit" class="button rounded-5 color-btn p-2">Valider</button>
+      </div>
+    </form>
 
-<!-- tableau de resultat -->
-<div class=" pb-5 pe-1 ps-1">
-<div class="border bg-light mt-3 card-info p-2" *ngFor="let expense of expenses">
-  {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>{{ expense.amount }} € <strong> | </strong> {{ expense.exp_date | date:'dd/MM/yyyy' }} <strong> | </strong> {{ methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{ expense.location }} <strong> | </strong>{{ expense.note }} 
-</div>
-<div class=" bg-success mt-3 card-info p-2 ps-3" *ngFor="let deposit of deposits">
-  {{ deposit.amount }} €<strong> | </strong> {{ deposit.dep_date | date:'dd/MM/yyyy' }}  <strong> | </strong> {{ deposit.note }} 
-</div>
-</div>
+    <!-- tableau de resultat -->
+    <div class="pb-5 pe-1 ps-1">
+      <div *ngIf="!filtersApplied">
+        <div class="border bg-light mt-3 card-info p-2" *ngFor="let expense of expenses">
+          {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>{{ expense.amount }} € <strong> | </strong> {{ expense.exp_date | date:'dd/MM/yyyy' }} <strong> | </strong> {{ methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{ expense.location }} <strong> | </strong>{{ expense.note }}
+        </div>
+        <div class=" bg-success mt-3 card-info p-2 ps-3" *ngFor="let deposit of deposits">
+         {{ deposit.amount }} € <strong> | </strong> {{ deposit.dep_date | date:'dd/MM/yyyy' }} <strong> |   </strong>{{ deposit.note }}
+        </div>
+      </div>
+      <div *ngIf="filtersApplied && filteredResults.length > 0">
+      <div class="border bg-light mt-3 card-info p-2" *ngFor="let expense of filteredResults">
+        {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>{{ expense.amount }} € <strong> | </strong> {{ expense.exp_date | date:'dd/MM/yyyy' }} <strong> | </strong> {{ methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{ expense.location }} <strong> | </strong>{{ expense.note }}
+      </div>
     </div>
-  </div> 
+    <div *ngIf="filtersApplied && filteredResults.length === 0">
+      <!-- Mostrar mensaje si no hay resultados después de aplicar filtros -->
+      <p class="border bg-warning mt-3 card-info p-2">{{ noResultsMessage }}</p>
+    </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- FOOTER -->
