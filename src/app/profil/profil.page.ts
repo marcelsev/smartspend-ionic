@@ -5,8 +5,6 @@ import { CategoryService } from '../category.service';
 import { ExpenseService } from '../expense.service';
 import { MethodPayService } from '../method-pay.service';
 import { DepositService } from '../deposit.service';
-import  Chart, { ChartItem, ChartType }  from 'chart.js/auto';
-import { ApexChart, ApexNonAxisChartSeries, ApexResponsive } from 'ng-apexcharts';
 
 
 @Component({
@@ -15,7 +13,7 @@ import { ApexChart, ApexNonAxisChartSeries, ApexResponsive } from 'ng-apexcharts
   styleUrls: ['./profil.page.scss'],
 })
 export class ProfilPage implements OnInit {
-  /* @ViewChild('doughnutChart') doughnutChartRef!: ElementRef<HTMLCanvasElement>; */
+
   
   userId: number | null = null;
   userName: string = '';
@@ -26,7 +24,7 @@ export class ProfilPage implements OnInit {
   categoriesMap: { [key: number]: string } = {};
   methodPaysMap: { [key: number]: string } = {};
 
-  // Variables para almacenar los valores de los filtros
+  
   fechaInicio: Date | undefined;
   fechaFin: Date | undefined;
   categoryId: number | undefined;
@@ -35,11 +33,12 @@ export class ProfilPage implements OnInit {
   methodPayId: number | undefined;
 
   filteredResults: any[] = [];
-  filtersApplied: boolean = false; // Bandera para indicar si se aplicaron filtros
+  filtersApplied: boolean = false; 
   noResultsMessage: string = ''; //
-
-
-
+  totalExpenses: number = 0; // 
+  totalDeposits: number = 0; 
+  totalFilteredExpenses: number = 0; // Variable para almacenar el total de gastos filtrados
+  totalFilteredDeposits: number = 0; 
   constructor(
     private authService: AuthService,
     private categoryService: CategoryService,
@@ -68,14 +67,14 @@ export class ProfilPage implements OnInit {
   } */
 
   ngOnInit(): void {
-    // Obtiene el perfil del usuario y carga las categorías y gastos asociados
+    
     this.authService.getUserProfile().subscribe(
       (userData) => {
         console.log('Información del usuario:', userData);
-        this.userName = userData.name;
-        this.userId = userData.id; // Asigna el userId del usuario conectado
+        this.userName = this.formatUserName(userData.name);
+        this.userId = userData.id; 
 
-        // Carga las categorías y los gastos solo si se obtuvo el userId correctamente
+        
         if (this.userId) {
           this.loadCategories();
           this.loadExpenses();
@@ -87,17 +86,28 @@ export class ProfilPage implements OnInit {
       },
       (error) => {
         console.error('Error al obtener información del usuario:', error);
-        // Maneja el error apropiadamente
+        
       }
     );
  
+  }
+  private formatUserName(name: string): string { 
+    const parts = name.split(' ');
+    const formattedParts = parts.map(part => {
+      const formattedPart = part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      return formattedPart;
+    });
+  
+    const formattedName = formattedParts.join(' ');
+  
+    return formattedName;
   }
   
  
   logout(): void {
     this.authService.logout().subscribe(
       () => {
-        window.location.href = '/'; // Redirige al usuario a la página de inicio al salir
+        window.location.href = '/';
       },
       (error) => {
         console.error('Error al desconectar:', error);
@@ -142,13 +152,14 @@ export class ProfilPage implements OnInit {
             'Expenses obtenidas filtradas por userId:',
             this.expenses
           );
+          this.calculateTotalExpenses();
         } else {
           console.error('No se pudo obtener el userId del usuario');
         }
       },
       (error) => {
         console.error('Error al obtener expenses:', error);
-        // Maneja el error de acuerdo a tus necesidades
+        
       }
     );
   }
@@ -161,6 +172,7 @@ export class ProfilPage implements OnInit {
             (deposit) => deposit.UserId === this.userId
           );
           console.log('deposit obtenidas filtradas por userId:', this.deposits);
+          this.calculateTotalDeposits();
         } else {
           console.error('No se pudo obtener el userId del usuario');
         }
@@ -170,47 +182,22 @@ export class ProfilPage implements OnInit {
       }
     );
   }
-  /* applyFilters(): void {
-    console.log('Applying filters...');
-    console.log('Fecha inicio:', this.fechaInicio);
-    console.log('Fecha fin:', this.fechaFin);
-    console.log('Categoría ID:', this.categoryId);
-  
-    this.filteredResults = this.expenses.filter((expense) => {
-      let matches = true;
-  
-      // Convertir categoryId de string a number para comparar
-      if (this.categoryId !== undefined && expense.CategoryId !== parseInt(this.categoryId.toString(), 10)) {
-        matches = false;
-      }
-  
-      // Convertir minAmount de string a number para comparar
-      if (this.minAmount !== undefined && expense.amount < parseInt(this.minAmount.toString(), 10)) {
-        matches = false;
-      }
-  
-      // Convertir maxAmount de string a number para comparar
-      if (this.maxAmount !== undefined && expense.amount > parseInt(this.maxAmount.toString(), 10)) {
-        matches = false;
-      }
-  
-      // Convertir methodPayId de string a number para comparar
-      if (this.methodPayId !== undefined && expense.MethodPayId !== parseInt(this.methodPayId.toString(), 10)) {
-        matches = false;
-      }
-  
-      return matches;
-    });
-  
-    console.log('Filtered Results:', this.filteredResults);
+  calculateTotalExpenses(): void {
+    // Calcula el total de gastos
+    this.totalExpenses = this.expenses.reduce((total, expense) => total + expense.amount, 0);
+    console.log('Total de gastos:', this.totalExpenses);
   }
-   */
 
+  calculateTotalDeposits(): void {
+    // Calcula el total de depósitos
+    this.totalDeposits = this.deposits.reduce((total, deposit) => total + deposit.amount, 0);
+    console.log('Total de depósitos:', this.totalDeposits);
+  }
   applyFilters() {
-    // Combinar todos los gastos y depósitos inicialmente
-    this.filteredResults = [...this.expenses, ...this.deposits];
+    
+    this.filteredResults = [...this.expenses];
   
-    // Verificar si se han seleccionado criterios de filtro
+   
     const filtersSelected =
       this.categoryId !== undefined ||
       this.minAmount !== undefined ||
@@ -219,31 +206,29 @@ export class ProfilPage implements OnInit {
       (this.fechaInicio !== undefined && this.fechaFin !== undefined);
   
     if (filtersSelected) {
-      // Aplicar filtros según los criterios seleccionados
+     
       this.filteredResults = this.filteredResults.filter((item) => {
         let matches = true;
   
-        // Aplicar filtro por categoría
+        
         if (this.categoryId !== undefined && item.CategoryId !== parseInt(this.categoryId.toString(), 10)) {
           matches = false;
         }
   
-        // Aplicar filtro por monto mínimo
         if (this.minAmount !== undefined && item.amount < parseInt(this.minAmount.toString(), 10)) {
           matches = false;
         }
   
-        // Aplicar filtro por monto máximo
+      
         if (this.maxAmount !== undefined && item.amount > parseInt(this.maxAmount.toString(), 10)) {
           matches = false;
         }
   
-        // Aplicar filtro por método de pago
+        
         if (this.methodPayId !== undefined && item.MethodPayId !== parseInt(this.methodPayId.toString(), 10)) {
           matches = false;
         }
   
-        // Aplicar filtro por rango de fechas
         if (this.fechaInicio !== undefined && this.fechaFin !== undefined) {
           const expenseDate = new Date(item.exp_date);
           if (expenseDate < this.fechaInicio || expenseDate > this.fechaFin) {
@@ -254,23 +239,28 @@ export class ProfilPage implements OnInit {
         return matches;
       });
   
-      // Verificar si no hay resultados después de aplicar filtros
+   
       if (this.filteredResults.length === 0) {
         this.noResultsMessage = 'Aucun résultat ne correspond aux filtres appliqués.';
       } else {
-        this.noResultsMessage = ''; // Reiniciar el mensaje
+        this.noResultsMessage = ''; 
       }
   
-      this.filtersApplied = true; // Indicar que se aplicaron filtros
+      this.filtersApplied = true; 
     } else {
-      // No se aplicaron filtros, mostrar todos los elementos
-      this.filteredResults = [...this.expenses, ...this.deposits];
+     
+      this.filteredResults = [...this.expenses];
       this.filtersApplied = false;
-      this.noResultsMessage = ''; // Reiniciar el mensaje
+      this.noResultsMessage = ''; 
     }
+    this.totalFilteredExpenses = this.filteredResults.filter(item => item.hasOwnProperty('CategoryId')).reduce((total, item) => total + item.amount, 0);
+    this.totalFilteredDeposits = this.filteredResults.filter(item => item.hasOwnProperty('MethodPayId')).reduce((total, item) => total + item.amount, 0);
+
+    // Actualiza el indicador de filtros aplicados
+    this.filtersApplied = true;
   }
     clearFilters() {
-      // Limpiar todos los filtros y mostrar todos los gastos y depósitos
+      
       this.categoryId = undefined;
       this.minAmount = undefined;
       this.maxAmount = undefined;
@@ -278,8 +268,8 @@ export class ProfilPage implements OnInit {
       this.fechaInicio = undefined;
       this.fechaFin = undefined;
       this.filtersApplied = false;
-      this.filteredResults = [...this.expenses, ...this.deposits]; // Mostrar todos los gastos y depósitos
-      this.noResultsMessage = ''; // Reiniciar el mensaje
+      this.filteredResults = [...this.expenses, ...this.deposits]; 
+      this.noResultsMessage = ''; 
     }
   
 
@@ -337,3 +327,40 @@ export class ProfilPage implements OnInit {
   } */
 
 }
+
+
+/* applyFilters(): void {
+    console.log('Applying filters...');
+    console.log('Fecha inicio:', this.fechaInicio);
+    console.log('Fecha fin:', this.fechaFin);
+    console.log('Categoría ID:', this.categoryId);
+  
+    this.filteredResults = this.expenses.filter((expense) => {
+      let matches = true;
+  
+      // Convertir categoryId de string a number para comparar
+      if (this.categoryId !== undefined && expense.CategoryId !== parseInt(this.categoryId.toString(), 10)) {
+        matches = false;
+      }
+  
+      // Convertir minAmount de string a number para comparar
+      if (this.minAmount !== undefined && expense.amount < parseInt(this.minAmount.toString(), 10)) {
+        matches = false;
+      }
+  
+      // Convertir maxAmount de string a number para comparar
+      if (this.maxAmount !== undefined && expense.amount > parseInt(this.maxAmount.toString(), 10)) {
+        matches = false;
+      }
+  
+      // Convertir methodPayId de string a number para comparar
+      if (this.methodPayId !== undefined && expense.MethodPayId !== parseInt(this.methodPayId.toString(), 10)) {
+        matches = false;
+      }
+  
+      return matches;
+    });
+  
+    console.log('Filtered Results:', this.filteredResults);
+  }
+   */

@@ -1,25 +1,30 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { CsrfTokenService } from './csrf-token-service.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExpenseService {
-
   private apiUrl = 'http://localhost:3000';
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private csrfTokenService: CsrfTokenService
+  ) {}
 
   getExpensesByUserId(): Observable<any[]> {
     const token = localStorage.getItem('token');
 
     if (!token) {
       console.error('Token de autenticación no encontrado en el localStorage');
-      return throwError('Token de autenticación no encontrado en el localStorage');
+      return throwError(
+        'Token de autenticación no encontrado en el localStorage'
+      );
     }
     const userId = this.decodeToken(token).userId;
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     const url = `${this.apiUrl}/expense`;
@@ -40,11 +45,28 @@ export class ExpenseService {
     }
   }
   createExpense(expenseData: any): Observable<any> {
-    const url = `${this.apiUrl}/expense`;
-    return this.http.post(url, expenseData).pipe(
+    return this.csrfTokenService.getCsrfToken().pipe(
       catchError((error) => {
-        console.error('Error al crear expense:', error);
-        return throwError('Error al crear expense'); // Puedes manejar el error aquí o reenviarlo al componente
+        console.error('Error al obtener el token CSRF:', error);
+        return throwError('No se pudo obtener el token CSRF.');
+      }),
+      switchMap((csrfToken: string) => {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'X-XSRF-TOKEN': csrfToken,
+        });
+
+        return this.http
+          .post<any>(`${this.apiUrl}/expense`, expenseData, {
+            headers,
+            withCredentials: true,
+          })
+          .pipe(
+            catchError((error) => {
+              console.error('Error al crear gasto:', error);
+              return throwError('Error al crear gasto.');
+            })
+          );
       })
     );
   }

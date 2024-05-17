@@ -2,7 +2,11 @@
   <ion-toolbar>
     <nav class="container d-flex justify-content-around align-items-center">
       <div class="nav-img">
-        <img src="../../assets/img/logonobg.png" alt="" class="photo img-fluid" />
+        <img
+          src="../../assets/img/logonobg.png"
+          alt=""
+          class="photo img-fluid"
+        />
       </div>
       <div>Bienvenue <strong>{{ userName }}</strong></div>
       <div><i class="fas fa-user-slash" (click)="logout()"></i></div>
@@ -11,119 +15,222 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="graphique text-center">
-    <h1>Perfil del Usuario</h1>
-    <div>
-     
+  <div class="text-center" >
+    <div class=" m-3 cont-max-width p-1">
+      <p class="text-start fw-light">Votre montant total : </p>
+      <div class=" col-12 d-flex ">
+      <div class="text-center col-6 shadow-lg p-3 mb-5 bg-body-tertiary rounded me-1" style="color: #0052d0;">Total des déponses : <p>{{ totalExpenses }} €</p></div>
+      <div class="text-center col-6 shadow-lg p-3 mb-5 bg-body-tertiary rounded ms-1" style="color: #2ab2ff;">Total des revenus : <p>{{ totalDeposits }} €</p></div>
     </div>
+      <div *ngIf="filtersApplied && filteredResults.length > 0">
+        <div class="text-center shadow-lg p-3 mb-5 rounded fw-bold" style="background-color: #eaf3ff;">
+          Total recherche (dépenses) : {{ totalFilteredExpenses }} €
+        </div>
+      </div>
+    </div>
+
     <!-- Aquí se insertará el gráfico -->
     <!-- <canvas #doughnutChart width="40" height="40"></canvas> -->
   </div>
 
   <!-- btn -->
 
-   <section class=" container cont-btn text-center">
-  <div
-    class="card-ajouter text-center d-flex justify-content-around align-items-center mb-4 ms-4 me-4 rounded-3 p-2"
-  >
-    <div class=""><strong>Ajoutez vos opérations</strong></div>
-    <div><i class="fa fa-plus border rounded-4 border-black p-2" routerLink="/formulaire"></i></div>
-  </div>
-</section> 
+  <section class="container cont-btn text-center">
+    <div
+      class="card-ajouter text-center d-flex justify-content-around align-items-center mb-4 ms-4 me-4 rounded-3 p-2"
+    >
+      <div class=""><strong>Ajoutez vos opérations</strong></div>
+      <div>
+        <i
+          class="fa fa-plus border rounded-4 border-black p-2"
+          routerLink="/formulaire"
+        ></i>
+      </div>
+    </div>
+  </section>
   <!-- form-recherche -->
-<div class="container mb-5">
-  <div class="recherche mb-3 cont-max-width p-1">
-    <div class="text-center ps-3 pt-2 pb-3 fs-2">Informations ajoutées :</div>
-    <div class="text-start ps-3  pt-3">Trouvez vos dépenses! :</div>
-    <div class="d-flex justify-content-between ps-3"><p> Filtres : </p> <button type="button" class=" btn rounded-4 btn-info btn-sm  p-2  mb-3" (click)="clearFilters()">Effacer les filtres</button> </div> 
-    <form class="align-items-center text-center border-bottom border-4 pb-3" (ngSubmit)="applyFilters()">
-      <!-- Contenido del formulario (inputs y select) -->
-      <div class="form-group">
-        <label for="inputFecha1">Date debut</label>
-        <input type="date" id="inputFecha1" [(ngModel)]="fechaInicio" name="fechaInicio" required placeholder="Date" />
-      </div>-
-      <div class="form-group">
-        <label for="inputFecha2">Date fini</label>
-        <input type="date" id="inputFecha2" [(ngModel)]="fechaFin" name="fechaFin" required />
+  <div class="container mb-5">
+    <div class="recherche mb-3 cont-max-width p-1">
+      <div class="text-center ps-3 pt-2 pb-3 fs-2">Informations ajoutées :</div>
+      <div class="text-center ps-3 pt-3 pb-2 fw-light">Trouvez vos dépenses ! </div>
+      <div class="d-flex justify-content-between ps-3">
+        <p class="fw-bold">Filtres :</p>
+        <button
+          type="button"
+          class="btn rounded-4 btn-info btn-sm p-2 mb-3"
+          (click)="clearFilters()"
+        >
+          Effacer les filtres
+        </button>
       </div>
-      <div class="form-group" *ngIf="categories.length > 0">
-        <label for="select1">Catégorie</label>
-        <select id="select1" [(ngModel)]="categoryId" name="categoryId" required>
-          <option value="" disabled selected>Choisir une catégorie</option>
-          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="inputNumber">Min Montant</label>
-        <input type="number" id="inputNumber" [(ngModel)]="minAmount" name="minAmount" required />
-      </div>-
-      <div class="form-group">
-        <label for="inputNumber2">Max Montant</label>
-        <input type="number" id="inputNumber2" [(ngModel)]="maxAmount" name="maxAmount" required />
-      </div>
-      <div class="form-group">
-        <label for="select2"> Paiement</label>
-        <select id="select2" [(ngModel)]="methodPayId" name="methodPayId" required>
-          <option value="" disabled selected>Choisir un mode de paiement</option>
-          <option *ngFor="let method of methodPays" [value]="method.id">{{ method.name }}</option>
-        </select>
-      </div>
-      <div class="w-100">
-        <button type="submit" class="button rounded-5 color-btn p-2">Valider</button>
-      </div>
-    </form>
-
-    <!-- tableau de resultat -->
-    <div class="pb-5 pe-1 ps-1">
-      <div *ngIf="!filtersApplied">
-        <div class="border bg-light mt-3 card-info p-2" *ngFor="let expense of expenses">
-          {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>{{ expense.amount }} € <strong> | </strong> {{ expense.exp_date | date:'dd/MM/yyyy' }} <strong> | </strong> {{ methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{ expense.location }} <strong> | </strong>{{ expense.note }}
+      <form
+        class="align-items-center text-center border-bottom border-4 pb-3 mb-2"
+        (ngSubmit)="applyFilters()"
+      >
+        <div class="form-group">
+          <label for="inputFecha1">Date debut</label>
+          <input
+            type="date"
+            id="inputFecha1"
+            [(ngModel)]="fechaInicio"
+            name="fechaInicio"
+            required
+            placeholder="Date"
+          />
         </div>
-        <div class=" bg-success mt-3 card-info p-2 ps-3" *ngFor="let deposit of deposits">
-         {{ deposit.amount }} € <strong> | </strong> {{ deposit.dep_date | date:'dd/MM/yyyy' }} <strong> |   </strong>{{ deposit.note }}
+        -
+        <div class="form-group">
+          <label for="inputFecha2">Date fini</label>
+          <input
+            type="date"
+            id="inputFecha2"
+            [(ngModel)]="fechaFin"
+            name="fechaFin"
+            required
+          />
+        </div>
+        <div class="form-group" *ngIf="categories.length > 0">
+          <label for="select1">Catégorie</label>
+          <select
+            id="select1"
+            [(ngModel)]="categoryId"
+            name="categoryId"
+            required
+          >
+            <option value="" disabled selected>Choisir une catégorie</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="inputNumber">Min Montant</label>
+          <input
+            type="number"
+            id="inputNumber"
+            [(ngModel)]="minAmount"
+            name="minAmount"
+            required
+          />
+        </div>
+        -
+        <div class="form-group">
+          <label for="inputNumber2">Max Montant</label>
+          <input
+            type="number"
+            id="inputNumber2"
+            [(ngModel)]="maxAmount"
+            name="maxAmount"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="select2"> Paiement</label>
+          <select
+            id="select2"
+            [(ngModel)]="methodPayId"
+            name="methodPayId"
+            required
+          >
+            <option value="" disabled selected>
+              Choisir un mode de paiement
+            </option>
+            <option *ngFor="let method of methodPays" [value]="method.id">
+              {{ method.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-100">
+          <button type="submit" class="button rounded-5 color-btn p-2">
+            Valider
+          </button>
+        </div>
+      </form>
+
+      <!-- tableau de resultat -->
+      <div class="pb-5 pe-1 ps-1">
+        <div *ngIf="!filtersApplied">
+          <div
+            class="border bg-body-tertiary mt-3 card-info p-2"
+            *ngFor="let expense of expenses"
+          >
+            {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>-{{
+            expense.amount }} € <strong> | </strong> {{ expense.exp_date |
+            date:'dd/MM/yyyy' }} <strong> | </strong> {{
+            methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{
+            expense.location }} <strong> | </strong>{{ expense.note }}
+          </div>
+          <p class="text-center mt-2 fw-bold">-------------------------------------------</p>
+          <div
+            class="mt-3 card-info p-2 ps-3" style="background-color: #2ab2ff;"
+            *ngFor="let deposit of deposits"
+          >
+            +{{ deposit.amount }} € <strong> | </strong> {{ deposit.dep_date |
+            date:'dd/MM/yyyy' }} <strong> | </strong>{{ deposit.note }}
+          </div>
+        </div>
+        <div *ngIf="filtersApplied && filteredResults.length > 0">
+          <div
+            class="border bg-body-tertiary mt-3 card-info p-2"
+            *ngFor="let expense of filteredResults"
+          >
+            {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>-{{
+            expense.amount }} € <strong> | </strong> {{ expense.exp_date |
+            date:'dd/MM/yyyy' }} <strong> | </strong> {{
+            methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{
+            expense.location }} <strong> | </strong>{{ expense.note }}
+          </div>
+        </div>
+        <div *ngIf="filtersApplied && filteredResults.length === 0">
+          <!-- il n'y a pas des resultats -->
+          <p class="border bg-warning mt-3 card-info p-2">
+            {{ noResultsMessage }}
+          </p>
         </div>
       </div>
-      <div *ngIf="filtersApplied && filteredResults.length > 0">
-      <div class="border bg-light mt-3 card-info p-2" *ngFor="let expense of filteredResults">
-        {{ categoriesMap[expense.CategoryId] }} <strong> | </strong>{{ expense.amount }} € <strong> | </strong> {{ expense.exp_date | date:'dd/MM/yyyy' }} <strong> | </strong> {{ methodPaysMap[expense.MethodPayId] }} <strong> | </strong> {{ expense.location }} <strong> | </strong>{{ expense.note }}
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ion-footer>
+    <div class="container d-flex justify-content-around align-items-center">
+      <div class="footer-item flex-item text-center">
+        <ul>
+          <li>
+            <a [routerLink]="'/information-app'" fragment="testfq"
+              >À propos de
+            </a>
+          </li>
+          <li><a routerLink="/information-app">Contact</a></li>
+          <li>
+            <a routerLink="/information-app"
+              >Politique de confidentialité et conditions de service</a
+            >
+          </li>
+        </ul>
       </div>
-    </div>
-    <div *ngIf="filtersApplied && filteredResults.length === 0">
-      <!-- Mostrar mensaje si no hay resultados después de aplicar filtros -->
-      <p class="border bg-warning mt-3 card-info p-2">{{ noResultsMessage }}</p>
-    </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- FOOTER -->
-<ion-footer >
-  <div class="container d-flex justify-content-around align-items-center">
-  <div class="footer-item flex-item text-center ">
-    <ul>
-      <li><a [routerLink]="'/information-app'" fragment="testfq">À propos de </a></li>
-      <li><a routerLink="/information-app">Contact</a></li>
-      <li>
-        <a routerLink="/information-app">Politique de confidentialité et conditions de service</a>
-      </li>
-    </ul>
-  </div>
-  <div class="image footer-item text-center">
-    <img src="../../assets/img/logonobg.png" alt="logo" class="img-fluid mw-25" routerLink="/information-app"/>
-  </div>
-  <div class="footer-item flex-item text-center ">
-    <ul>
-      <li><a routerLink="/information-app">FAQs</a></li>
-      <li><a routerLink="/information-app">Informations sur les copyright</a></li>
-      <li>
-        <a routerLink="/information-app">Reseau sociaux</a>
-        <br>
-        <i class="fa fa-twitter pe-2"></i>
+      <div class="image footer-item text-center">
+        <img
+          src="../../assets/img/logonobg.png"
+          alt="logo"
+          class="img-fluid mw-25"
+          routerLink="/information-app"
+        />
+      </div>
+      <div class="footer-item flex-item text-center">
+        <ul>
+          <li><a routerLink="/information-app">FAQs</a></li>
+          <li>
+            <a routerLink="/information-app">Informations sur les copyright</a>
+          </li>
+          <li>
+            <a routerLink="/information-app">Reseau sociaux</a>
+            <br />
+            <i class="fa fa-twitter pe-2"></i>
             <i class="fa fa-facebook"></i>
-      </li>
-    </ul>
-  </div>
-</div>
-</ion-footer>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ion-footer>
 </ion-content>

@@ -1,13 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { CsrfTokenService } from './csrf-token-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DepositService {
   private apiUrl = 'http://localhost:3000';
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private csrfTokenService: CsrfTokenService
+  ) {}
 
   getDepositsByUserId(): Observable<any[]> {
     const token = localStorage.getItem('token');
@@ -41,13 +45,30 @@ export class DepositService {
     }
   }
 
-  // Método para insertar un nuevo depósito (deposit)
+  
   createDeposit(depositData: any): Observable<any> {
-    const url = `${this.apiUrl}/deposit`;
-    return this.http.post(url, depositData).pipe(
+    return this.csrfTokenService.getCsrfToken().pipe(
       catchError((error) => {
-        console.error('Error al crear depósito:', error);
-        return throwError('Error al crear depósito'); // Puedes manejar el error aquí o reenviarlo al componente
+        console.error('Error al obtener el token CSRF:', error);
+        return throwError('No se pudo obtener el token CSRF.');
+      }),
+      switchMap((csrfToken: string) => {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'X-XSRF-TOKEN': csrfToken,
+        });
+
+        return this.http
+          .post<any>(`${this.apiUrl}/deposit`, depositData, {
+            headers,
+            withCredentials: true,
+          })
+          .pipe(
+            catchError((error) => {
+              console.error('Error al crear gasto:', error);
+              return throwError('Error al crear gasto.');
+            })
+          );
       })
     );
   }

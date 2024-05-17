@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-inscription',
@@ -11,11 +12,13 @@ import { Router } from '@angular/router';
 export class InscriptionPage {
   newUserForm: FormGroup;
   surnameExists: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {
     this.newUserForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z\\s]+$')]],
@@ -33,24 +36,24 @@ export class InscriptionPage {
     return null;
   }
   createUser(): void {
-    if (this.surnameExists || !this.newUserForm.valid) {
-      return;
-    }
+    const { name, surname, email, password } = this.newUserForm.value;
 
-    const { confirmPassword, ...userData } = this.newUserForm.value;
-    console.log('Datos del nuevo usuario:', userData); 
-    delete userData.confirmPassword;
-    this.userService.createUser(userData).subscribe(
-      (response) => {
-        console.log('Usuario creado:', response);
-        this.newUserForm.reset();
+    this.userService.createUser(name, surname, email, password).subscribe(
+      () => {
+        this.newUserForm.reset(); 
+        
         this.router.navigate(['/index']);
       },
       (error) => {
         console.error('Error al crear usuario:', error);
+       
+        this.errorMessage = 'Error al crear usuario. Por favor, inténtalo de nuevo.';
       }
     );
   }
+  
+  
+
 
   checkUsername(surname: string): void {
     this.userService.checkUsernameUnique(surname).subscribe(
@@ -63,7 +66,6 @@ export class InscriptionPage {
     );
   }
 
-  // Validar si las contraseñas coinciden
   checkPasswordMatch(): void {
     const passwordControl = this.newUserForm.get('password');
     const confirmPasswordControl = this.newUserForm.get('confirmPassword');

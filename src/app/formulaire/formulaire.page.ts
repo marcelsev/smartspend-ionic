@@ -48,36 +48,48 @@ export class FormulairePage implements OnInit {
 
     this.authService.getUserProfile().subscribe(
       (userData) => {
-        this.userName = userData.name;
-        this.userId = userData.id; // Obtener el ID del usuario autenticado
+        this.userName = this.formatUserName(userData.name);
+        this.userId = userData.id; 
         console.log(this.userId);
       },
       (error) => {
-        console.error('Error al obtener información del usuario:', error);
+        console.error('Error info user:', error);
       }
     );
   }
 
+  private formatUserName(name: string): string { 
+    const parts = name.split(' ');
+    const formattedParts = parts.map(part => {
+      const formattedPart = part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      return formattedPart;
+    });
+  
+    const formattedName = formattedParts.join(' ');
+  
+    return formattedName;
+  }
+  
   createDeposit(): void {
     console.log('Entrando a createDeposit()');
     if (this.depositForm.valid && this.userId) {
       const depositData = {
         ...this.depositForm.value,
         userId: this.userId,
-         // Incluir el ID del usuario en los datos del depósito
+         
       };
       console.log(this.depositForm);
-      console.log('Datos de depósito a enviar:', depositData); // Agregar esta línea
+      console.log('Datos de depósito a enviar:', depositData); 
 
       this.depositService.createDeposit(depositData).subscribe(
         (response: any) => {
           console.log('Depósito creado exitosamente:', response);
           this.depositForm.reset();
-          window.location.href = '/profil'; // Reiniciar el formulario después de enviar
+          window.location.href = '/profil'; 
         },
         (error: any) => {
           console.error('Error al crear depósito:', error);
-          // Manejar el error apropiadamente
+         
         }
       );
       console.log('Datos del formulario:', this.depositForm.value);
@@ -115,21 +127,21 @@ export class FormulairePage implements OnInit {
       const expenseData = {
         ...this.expenseForm.value,
         userId: this.userId,
-        categoryId: +this.expenseForm.value.CategoryId, // Convertir a número entero
+        categoryId: +this.expenseForm.value.CategoryId, 
         methodPayId: +this.expenseForm.value.MethodPayId,
-         // Incluir el ID del usuario en los datos del gasto
+         
       };
       console.log('Expense data to send:', expenseData);
   
       this.expenseService.createExpense(expenseData).subscribe(
         (response: any) => {
           console.log('Expense created successfully:', response);
-          this.expenseForm.reset(); // Reset the form after submission
+          this.expenseForm.reset(); 
           window.location.href = '/profil';
         },
         (error: any) => {
           console.error('Error creating expense:', error);
-          // Handle the error appropriately
+          
         }
       );
     } else {
@@ -140,7 +152,7 @@ export class FormulairePage implements OnInit {
   logout(): void {
     this.authService.logout().subscribe(
       () => {
-        window.location.href = '/'; // Redirige al usuario a la página de inicio al salir
+        window.location.href = '/'; 
       },
       (error) => {
         console.error('Error al desconectar:', error);
