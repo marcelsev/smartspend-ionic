@@ -19,7 +19,7 @@
     <div class=" m-3 cont-max-width p-1">
       <p class="text-start fw-light">Votre montant total : </p>
       <div class=" col-12 d-flex ">
-      <div class="text-center col-6 shadow-lg p-3 mb-5 bg-body-tertiary rounded me-1" style="color: #0052d0;">Total des déponses : <p>{{ totalExpenses }} €</p></div>
+      <div class="text-center col-6 shadow-lg p-3 mb-5 bg-body-tertiary rounded me-1" style="color: #0052d0;">Total des dépenses : <p>{{ totalExpenses }} €</p></div>
       <div class="text-center col-6 shadow-lg p-3 mb-5 bg-body-tertiary rounded ms-1" style="color: #2ab2ff;">Total des revenus : <p>{{ totalDeposits }} €</p></div>
     </div>
       <div *ngIf="filtersApplied && filteredResults.length > 0">
@@ -68,7 +68,7 @@
         (ngSubmit)="applyFilters()"
       >
         <div class="form-group">
-          <label for="inputFecha1">Date debut</label>
+          <label for="inputFecha1">Date début</label>
           <input
             type="date"
             id="inputFecha1"

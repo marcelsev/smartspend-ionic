@@ -29,7 +29,7 @@
   [formGroup]="expenseForm"
 >
   <div class="form-group mb-2">
-    <label for="categorie">Categorie</label>
+    <label for="categorie">Catégorie</label>
     <select formControlName="CategoryId" class="form-control">
       <option value="" disabled selected>Choisir une catégorie</option>
       <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
