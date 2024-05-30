@@ -65,7 +65,9 @@ export class ProfilPage implements OnInit {
       }
     );
   } */
-
+  sortByDateDescending(array: any[], key: string): any[] {
+    return array.sort((a, b) => new Date(b[key]).getTime() - new Date(a[key]).getTime());
+  }
   ngOnInit(): void {
     
     this.authService.getUserProfile().subscribe(
