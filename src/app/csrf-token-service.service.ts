@@ -11,7 +11,7 @@ export class CsrfTokenService {
 
   getCsrfToken(): Observable<string> {
     return this.http
-      .get<any>('http://localhost:3000/getCsrfToken', { withCredentials: true })
+      .get<any>('http://192.168.1.92:3000/getCsrfToken', { withCredentials: true })
       .pipe(
         map((response) => response.csrfToken),
         catchError((error) => {

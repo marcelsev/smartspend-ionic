@@ -7,22 +7,22 @@ import { Observable, catchError, map, switchMap, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = 'http://192.168.1.92:3000';
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   checkUsernameUnique(surname: string): Observable<any> {
     return this.http.get<any>(
-      `http://localhost:3000/users/check-surname/${surname}`
+      `${this.apiUrl}/users/check-surname/${surname}`
     );
   }
 
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:3000/users');
+    return this.http.get<any[]>(`${this.apiUrl}/users`);
   }
 
   private getCsrfToken(): Observable<string> {
     return this.http
-      .get<any>('http://localhost:3000/getCsrfToken', { withCredentials: true })
+      .get<any>(`${this.apiUrl}/getCsrfToken`, { withCredentials: true })
       .pipe(
         map((response) => response.csrfToken), 
         catchError((error) => {
@@ -69,12 +69,12 @@ export class UserService {
 
   updateUser(userId: string, userData: any): Observable<any> {
     return this.http.put<any>(
-      `http://localhost:3000/users/${userId}`,
+      `${this.apiUrl}/users/${userId}`,
       userData
     );
   }
 
   deleteUser(userId: string): Observable<any> {
-    return this.http.delete<any>(`http://localhost:3000/users/${userId}`);
+    return this.http.delete<any>(`${this.apiUrl}/users/${userId}`);
   }
 }
